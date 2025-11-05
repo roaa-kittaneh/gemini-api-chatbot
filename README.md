@@ -2,7 +2,7 @@
 
 A simple and interactive web-based chat application that uses Google's Gemini API.  
 Users can type a question, send it to the backend (Flask), and receive an organized and clean AI-generated response.
-<img width="936" height="487" alt="Screenshot 2025-11-05 190509" src="https://github.com/user-attachments/assets/2ad0b7b9-cb55-43f4-ae74-6d3cf982ac8c" />
+<img width="1018" height="627" alt="Screenshot 2025-11-05 175617" src="https://github.com/user-attachments/assets/b04b8bdd-90a0-4907-84c4-b5029140a39c" />
 
 
 ---
