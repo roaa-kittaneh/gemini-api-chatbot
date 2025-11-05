@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini Chat</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            width: 450px;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #ffeaa7;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 15px;
+            background: #00cec9;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0984e3;
+            transform: scale(1.03);
+        }
+
+        .chat-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .answer {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>💬 Gemini AI Chat</h2>
+
+        <div class="input-container">
+            <input id="userInput" placeholder="اكتب سؤالك هنا...">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+
+        <div id="chatBox" class="chat-box"></div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById("userInput").value;
+            const chatBox = document.getElementById("chatBox");
+
+            if (!input.trim()) return;
+
+            // عرض السؤال
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question";
+            questionDiv.textContent = "🟢 أنت: " + input;
+            chatBox.appendChild(questionDiv);
+
+            // مكان الإجابة
+            const answerDiv = document.createElement("div");
+            answerDiv.className = "answer";
+            answerDiv.textContent = "⏳ جاري التفكير...";
+            chatBox.appendChild(answerDiv);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // إرسال للسيرفر
+            try {
+                const res = await fetch("http://127.0.0.1:5000/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: input })
+                });
+                const data = await res.json();
+                answerDiv.textContent = "🤖 Gemini: \n" + data.reply;
+            } catch (error) {
+                answerDiv.textContent = "❌ خطأ في الاتصال بالسيرفر";
+            }
+
+            document.getElementById("userInput").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
